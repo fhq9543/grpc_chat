@@ -3,27 +3,29 @@ package main
 import (
 	"bufio"
 	"context"
-	"flag"
 	"fmt"
+	"grpcChat/config"
 	chat "grpcChat/pb"
+	"grpcChat/rabbitmq"
 	"grpcChat/utils"
 	"io"
 	"os"
 	"sync"
 	"time"
 
+	"github.com/golang/protobuf/ptypes/timestamp"
+
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 )
 
-var name *string = flag.String("name", "guess", "what's your name?")
 var mutex sync.Mutex
 
-func ConsoleLog(message string) {
+func ConsoleLog(res *chat.ChatResponse) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	fmt.Printf("\n------ %s -----\n%s\n> ", time.Now().Format("2006-01-02 15:04:05"), message)
+	fmt.Printf("\n------ %s -----\n%s\n> ", res.Time.AsTime().Format("2006-01-02 15:04:05"), res.Message)
 }
 
 func Input(prompt string) string {
@@ -41,7 +43,9 @@ func Input(prompt string) string {
 }
 
 func main() {
-	conn, err := grpc.Dial(":18881", grpc.WithInsecure())
+	rabbitmq.InitRabbitMQ()
+
+	conn, err := grpc.Dial(config.ChatClientAddr, grpc.WithInsecure())
 	if !utils.Check(err) {
 		panic(err)
 	}
@@ -52,15 +56,19 @@ func main() {
 
 	username := Input("请输入用户名：")
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("name", username))
-	stream, err := client.Say(ctx)
+	stream, err := client.GoChat(ctx)
 	if !utils.Check(err) {
 		panic(err)
 	}
+	fmt.Print("> ")
+
+	// 监听消息队列
+	go rabbitmq.Consume(username, ConsoleLog)
 
 	// 监听服务端通知
 	go func() {
 		var (
-			reply *chat.SayResponse
+			reply *chat.ChatResponse
 			err   error
 		)
 		for {
@@ -69,7 +77,7 @@ func main() {
 				cancel()
 				break
 			}
-			ConsoleLog(reply.Message)
+			ConsoleLog(reply)
 		}
 	}()
 
@@ -84,8 +92,10 @@ func main() {
 				cancel()
 				break
 			}
-			err = stream.Send(&chat.SayRequest{
-				Message: line,
+			err = stream.Send(&chat.ChatRequest{
+				Username: username,
+				Message:  line,
+				Time:     &timestamp.Timestamp{Seconds: time.Now().Unix()},
 			})
 			if !utils.Check(err) {
 				cancel()

@@ -30,16 +30,18 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-type SayRequest struct {
+type ChatRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Message string `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Username string               `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Message  string               `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Time     *timestamp.Timestamp `protobuf:"bytes,3,opt,name=time,proto3" json:"time,omitempty"`
 }
 
-func (x *SayRequest) Reset() {
-	*x = SayRequest{}
+func (x *ChatRequest) Reset() {
+	*x = ChatRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_chat_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -47,13 +49,13 @@ func (x *SayRequest) Reset() {
 	}
 }
 
-func (x *SayRequest) String() string {
+func (x *ChatRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SayRequest) ProtoMessage() {}
+func (*ChatRequest) ProtoMessage() {}
 
-func (x *SayRequest) ProtoReflect() protoreflect.Message {
+func (x *ChatRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_chat_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -65,29 +67,44 @@ func (x *SayRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SayRequest.ProtoReflect.Descriptor instead.
-func (*SayRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ChatRequest.ProtoReflect.Descriptor instead.
+func (*ChatRequest) Descriptor() ([]byte, []int) {
 	return file_chat_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SayRequest) GetMessage() string {
+func (x *ChatRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *ChatRequest) GetMessage() string {
 	if x != nil {
 		return x.Message
 	}
 	return ""
 }
 
-type SayResponse struct {
+func (x *ChatRequest) GetTime() *timestamp.Timestamp {
+	if x != nil {
+		return x.Time
+	}
+	return nil
+}
+
+type ChatResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Message string               `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
-	SayTime *timestamp.Timestamp `protobuf:"bytes,2,opt,name=sayTime,proto3" json:"sayTime,omitempty"`
+	Username string               `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Message  string               `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Time     *timestamp.Timestamp `protobuf:"bytes,3,opt,name=time,proto3" json:"time,omitempty"`
 }
 
-func (x *SayResponse) Reset() {
-	*x = SayResponse{}
+func (x *ChatResponse) Reset() {
+	*x = ChatResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_chat_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -95,13 +112,13 @@ func (x *SayResponse) Reset() {
 	}
 }
 
-func (x *SayResponse) String() string {
+func (x *ChatResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SayResponse) ProtoMessage() {}
+func (*ChatResponse) ProtoMessage() {}
 
-func (x *SayResponse) ProtoReflect() protoreflect.Message {
+func (x *ChatResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_chat_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -113,21 +130,28 @@ func (x *SayResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SayResponse.ProtoReflect.Descriptor instead.
-func (*SayResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ChatResponse.ProtoReflect.Descriptor instead.
+func (*ChatResponse) Descriptor() ([]byte, []int) {
 	return file_chat_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *SayResponse) GetMessage() string {
+func (x *ChatResponse) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *ChatResponse) GetMessage() string {
 	if x != nil {
 		return x.Message
 	}
 	return ""
 }
 
-func (x *SayResponse) GetSayTime() *timestamp.Timestamp {
+func (x *ChatResponse) GetTime() *timestamp.Timestamp {
 	if x != nil {
-		return x.SayTime
+		return x.Time
 	}
 	return nil
 }
@@ -138,20 +162,26 @@ var file_chat_proto_rawDesc = []byte{
 	0x0a, 0x0a, 0x63, 0x68, 0x61, 0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x04, 0x63, 0x68,
 	0x61, 0x74, 0x1a, 0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x62, 0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x22, 0x26, 0x0a, 0x0a, 0x53, 0x61, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x5d, 0x0a, 0x0b, 0x53,
-	0x61, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65,
-	0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73,
-	0x73, 0x61, 0x67, 0x65, 0x12, 0x34, 0x0a, 0x07, 0x73, 0x61, 0x79, 0x54, 0x69, 0x6d, 0x65, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d,
-	0x70, 0x52, 0x07, 0x73, 0x61, 0x79, 0x54, 0x69, 0x6d, 0x65, 0x32, 0x38, 0x0a, 0x04, 0x43, 0x68,
-	0x61, 0x74, 0x12, 0x30, 0x0a, 0x03, 0x53, 0x61, 0x79, 0x12, 0x10, 0x2e, 0x63, 0x68, 0x61, 0x74,
-	0x2e, 0x53, 0x61, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x11, 0x2e, 0x63, 0x68,
-	0x61, 0x74, 0x2e, 0x53, 0x61, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
-	0x28, 0x01, 0x30, 0x01, 0x42, 0x08, 0x5a, 0x06, 0x2e, 0x3b, 0x63, 0x68, 0x61, 0x74, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x74, 0x6f, 0x22, 0x73, 0x0a, 0x0b, 0x43, 0x68, 0x61, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x18,
+	0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x2e, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61,
+	0x6d, 0x70, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x22, 0x74, 0x0a, 0x0c, 0x43, 0x68, 0x61, 0x74,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72,
+	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x2e,
+	0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54,
+	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x32, 0x3d,
+	0x0a, 0x04, 0x43, 0x68, 0x61, 0x74, 0x12, 0x35, 0x0a, 0x06, 0x47, 0x6f, 0x43, 0x68, 0x61, 0x74,
+	0x12, 0x11, 0x2e, 0x63, 0x68, 0x61, 0x74, 0x2e, 0x43, 0x68, 0x61, 0x74, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x12, 0x2e, 0x63, 0x68, 0x61, 0x74, 0x2e, 0x43, 0x68, 0x61, 0x74, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x28, 0x01, 0x30, 0x01, 0x42, 0x08, 0x5a,
+	0x06, 0x2e, 0x3b, 0x63, 0x68, 0x61, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -168,19 +198,20 @@ func file_chat_proto_rawDescGZIP() []byte {
 
 var file_chat_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_chat_proto_goTypes = []interface{}{
-	(*SayRequest)(nil),          // 0: chat.SayRequest
-	(*SayResponse)(nil),         // 1: chat.SayResponse
+	(*ChatRequest)(nil),         // 0: chat.ChatRequest
+	(*ChatResponse)(nil),        // 1: chat.ChatResponse
 	(*timestamp.Timestamp)(nil), // 2: google.protobuf.Timestamp
 }
 var file_chat_proto_depIdxs = []int32{
-	2, // 0: chat.SayResponse.sayTime:type_name -> google.protobuf.Timestamp
-	0, // 1: chat.Chat.Say:input_type -> chat.SayRequest
-	1, // 2: chat.Chat.Say:output_type -> chat.SayResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	2, // 0: chat.ChatRequest.time:type_name -> google.protobuf.Timestamp
+	2, // 1: chat.ChatResponse.time:type_name -> google.protobuf.Timestamp
+	0, // 2: chat.Chat.GoChat:input_type -> chat.ChatRequest
+	1, // 3: chat.Chat.GoChat:output_type -> chat.ChatResponse
+	3, // [3:4] is the sub-list for method output_type
+	2, // [2:3] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_chat_proto_init() }
@@ -190,7 +221,7 @@ func file_chat_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_chat_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SayRequest); i {
+			switch v := v.(*ChatRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -202,7 +233,7 @@ func file_chat_proto_init() {
 			}
 		}
 		file_chat_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SayResponse); i {
+			switch v := v.(*ChatResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -246,7 +277,7 @@ const _ = grpc.SupportPackageIsVersion6
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ChatClient interface {
-	Say(ctx context.Context, opts ...grpc.CallOption) (Chat_SayClient, error)
+	GoChat(ctx context.Context, opts ...grpc.CallOption) (Chat_GoChatClient, error)
 }
 
 type chatClient struct {
@@ -257,31 +288,31 @@ func NewChatClient(cc grpc.ClientConnInterface) ChatClient {
 	return &chatClient{cc}
 }
 
-func (c *chatClient) Say(ctx context.Context, opts ...grpc.CallOption) (Chat_SayClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_Chat_serviceDesc.Streams[0], "/chat.Chat/Say", opts...)
+func (c *chatClient) GoChat(ctx context.Context, opts ...grpc.CallOption) (Chat_GoChatClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Chat_serviceDesc.Streams[0], "/chat.Chat/GoChat", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &chatSayClient{stream}
+	x := &chatGoChatClient{stream}
 	return x, nil
 }
 
-type Chat_SayClient interface {
-	Send(*SayRequest) error
-	Recv() (*SayResponse, error)
+type Chat_GoChatClient interface {
+	Send(*ChatRequest) error
+	Recv() (*ChatResponse, error)
 	grpc.ClientStream
 }
 
-type chatSayClient struct {
+type chatGoChatClient struct {
 	grpc.ClientStream
 }
 
-func (x *chatSayClient) Send(m *SayRequest) error {
+func (x *chatGoChatClient) Send(m *ChatRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *chatSayClient) Recv() (*SayResponse, error) {
-	m := new(SayResponse)
+func (x *chatGoChatClient) Recv() (*ChatResponse, error) {
+	m := new(ChatResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -290,41 +321,41 @@ func (x *chatSayClient) Recv() (*SayResponse, error) {
 
 // ChatServer is the server API for Chat service.
 type ChatServer interface {
-	Say(Chat_SayServer) error
+	GoChat(Chat_GoChatServer) error
 }
 
 // UnimplementedChatServer can be embedded to have forward compatible implementations.
 type UnimplementedChatServer struct {
 }
 
-func (*UnimplementedChatServer) Say(Chat_SayServer) error {
-	return status.Errorf(codes.Unimplemented, "method Say not implemented")
+func (*UnimplementedChatServer) GoChat(Chat_GoChatServer) error {
+	return status.Errorf(codes.Unimplemented, "method GoChat not implemented")
 }
 
 func RegisterChatServer(s *grpc.Server, srv ChatServer) {
 	s.RegisterService(&_Chat_serviceDesc, srv)
 }
 
-func _Chat_Say_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(ChatServer).Say(&chatSayServer{stream})
+func _Chat_GoChat_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ChatServer).GoChat(&chatGoChatServer{stream})
 }
 
-type Chat_SayServer interface {
-	Send(*SayResponse) error
-	Recv() (*SayRequest, error)
+type Chat_GoChatServer interface {
+	Send(*ChatResponse) error
+	Recv() (*ChatRequest, error)
 	grpc.ServerStream
 }
 
-type chatSayServer struct {
+type chatGoChatServer struct {
 	grpc.ServerStream
 }
 
-func (x *chatSayServer) Send(m *SayResponse) error {
+func (x *chatGoChatServer) Send(m *ChatResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *chatSayServer) Recv() (*SayRequest, error) {
-	m := new(SayRequest)
+func (x *chatGoChatServer) Recv() (*ChatRequest, error) {
+	m := new(ChatRequest)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -337,8 +368,8 @@ var _Chat_serviceDesc = grpc.ServiceDesc{
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "Say",
-			Handler:       _Chat_Say_Handler,
+			StreamName:    "GoChat",
+			Handler:       _Chat_GoChat_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},

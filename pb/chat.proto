@@ -6,14 +6,17 @@ option go_package = ".;chat";
 import "google/protobuf/timestamp.proto";
 
 service Chat {
-    rpc Say(stream SayRequest) returns (stream SayResponse) {};
+    rpc GoChat(stream ChatRequest) returns (stream ChatResponse) {};
 }
 
-message SayRequest {
-    string message = 1;
+message ChatRequest {
+    string username = 1;
+    string message = 2;
+    google.protobuf.Timestamp time = 3;
 }
 
-message SayResponse {
-    string message = 1;
-    google.protobuf.Timestamp sayTime = 2;
+message ChatResponse {
+    string username = 1;
+    string message = 2;
+    google.protobuf.Timestamp time = 3;
 }
